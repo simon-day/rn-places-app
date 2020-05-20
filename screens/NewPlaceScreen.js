@@ -14,6 +14,7 @@ import HeaderButton from '../components/HeaderButton';
 import Colors from '../constants/Colors';
 import * as placesActions from '../store/places-actions';
 import ImageSelector from '../components/ImageSelector';
+import LocationPicker from '../components/LocationPicker';
 
 const NewPlaceScreen = (props) => {
   const dispatch = useDispatch();
@@ -44,6 +45,7 @@ const NewPlaceScreen = (props) => {
           style={styles.textInput}
         />
         <ImageSelector onImageTaken={imageTakenHandler} />
+        <LocationPicker navigation={props.navigation} />
         <Button
           title="Save Place"
           color={Colors.primary}
