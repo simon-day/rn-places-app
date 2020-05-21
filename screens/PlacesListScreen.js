@@ -24,10 +24,12 @@ const PlacesListScreen = (props) => {
             props.navigation.navigate('PlaceDetail', {
               placeTitle: itemData.item.title,
               placeId: itemData.item.id,
+              imageUri: itemData.item.imageUri,
+              dispatch: dispatch,
             });
           }}
           title={itemData.item.title}
-          address="PLACEHOLDER"
+          address={itemData.item.address}
           image={itemData.item.imageUri}
         />
       )}

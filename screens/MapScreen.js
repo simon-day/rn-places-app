@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, Platform } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { StyleSheet, View, Text, Platform, Alert } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Colors from '../constants/Colors';
@@ -28,9 +28,22 @@ const MapScreen = (props) => {
     });
   };
 
-  //   const onRegionChange = (region) => {
-  //     this.setState({ region });
-  //   };
+  const savePickedLocationHandler = useCallback(() => {
+    if (!selectedLocation) {
+      Alert.alert(
+        'No location selected!',
+        'Make sure to select a location before trying to save.',
+        [{ text: 'OK' }]
+      );
+      return;
+    }
+
+    props.navigation.navigate('NewPlace', { pickedLocation: selectedLocation });
+  }, [selectedLocation]);
+
+  useEffect(() => {
+    props.navigation.setParams({ saveLocation: savePickedLocationHandler });
+  }, [savePickedLocationHandler]);
 
   let markerCoordinates;
 
@@ -56,9 +69,10 @@ const MapScreen = (props) => {
 };
 
 MapScreen.navigationOptions = (navData) => {
+  const saveFn = navData.navigation.getParam('saveLocation');
   return {
     headerRight: () => (
-      <TouchableOpacity style={styles.headerButton} onPress={() => {}}>
+      <TouchableOpacity style={styles.headerButton} onPress={saveFn}>
         <Text style={styles.headerButtonText}>SAVE</Text>
       </TouchableOpacity>
     ),

@@ -38,6 +38,24 @@ export const insertPlace = (title, imageUri, address, lat, lng) => {
   return promise;
 };
 
+export const deletePlace = (id) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        'DELETE FROM places where id = ?',
+        [id],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+  return promise;
+};
+
 export const fetchPlaces = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {

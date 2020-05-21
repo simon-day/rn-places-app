@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -9,8 +9,6 @@ import {
   Button,
 } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import HeaderButton from '../components/HeaderButton';
 import Colors from '../constants/Colors';
 import * as placesActions from '../store/places-actions';
 import ImageSelector from '../components/ImageSelector';
@@ -20,6 +18,7 @@ const NewPlaceScreen = (props) => {
   const dispatch = useDispatch();
   const [titleValue, setTitleValue] = useState('');
   const [selectedImage, setSelectedImage] = useState();
+  const [selectedLocation, setSelectedLocation] = useState();
   // const [title, setTitle] = useState('')
 
   const titleChangeHandler = (text) => {
@@ -27,13 +26,19 @@ const NewPlaceScreen = (props) => {
   };
 
   const savePlaceHandler = () => {
-    dispatch(placesActions.addPlace(titleValue, selectedImage));
+    dispatch(
+      placesActions.addPlace(titleValue, selectedImage, selectedLocation)
+    );
     props.navigation.goBack();
   };
 
   const imageTakenHandler = (imagePath) => {
     setSelectedImage(imagePath);
   };
+
+  const locationPickedHandler = useCallback((location) => {
+    setSelectedLocation(location);
+  }, []);
 
   return (
     <ScrollView>
@@ -45,7 +50,10 @@ const NewPlaceScreen = (props) => {
           style={styles.textInput}
         />
         <ImageSelector onImageTaken={imageTakenHandler} />
-        <LocationPicker navigation={props.navigation} />
+        <LocationPicker
+          navigation={props.navigation}
+          onLocationPicked={locationPickedHandler}
+        />
         <Button
           title="Save Place"
           color={Colors.primary}
@@ -59,15 +67,6 @@ const NewPlaceScreen = (props) => {
 NewPlaceScreen.navigationOptions = (navData) => {
   return {
     headerTitle: 'Add Place',
-    headerRight: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButton}>
-        <Item
-          title="Save"
-          iconName={Platform.OS === 'android' ? 'md-save' : 'ios-save'}
-          onPress={() => {}}
-        />
-      </HeaderButtons>
-    ),
   };
 };
 
