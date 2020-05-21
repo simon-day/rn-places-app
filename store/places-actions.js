@@ -9,10 +9,8 @@ export const SET_PLACES = 'SET_PLACES';
 export const removePlace = (placeId, imageUri) => {
   return async (dispatch) => {
     try {
-      console.log(imageUri);
       FileSystem.deleteAsync(imageUri.toString());
-      const dbResult = await deletePlace(placeId);
-      console.log(dbResult);
+      await deletePlace(placeId);
       dispatch({ type: REMOVE_PLACE, placeId: placeId });
     } catch (error) {
       console.log(error);
@@ -23,9 +21,6 @@ export const removePlace = (placeId, imageUri) => {
 
 export const addPlace = (title, image, location) => {
   return async (dispatch) => {
-    console.log(
-      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.lat},${location.lng}&key=${ENV.googleApiKey}`
-    );
     const response = await fetch(
       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.lat},${location.lng}&key=${ENV.googleApiKey}`
     );
@@ -40,7 +35,6 @@ export const addPlace = (title, image, location) => {
     }
 
     const address = resData.results[0].formatted_address;
-    console.log(address);
     const fileName = image.split('/').pop();
     const newPath = FileSystem.documentDirectory + fileName;
 
@@ -56,7 +50,6 @@ export const addPlace = (title, image, location) => {
         location.lat,
         location.lng
       );
-      console.log(dbResult);
       dispatch({
         type: ADD_PLACE,
         placeData: {

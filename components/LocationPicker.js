@@ -14,11 +14,16 @@ import MapPreview from '../components/MapPreview';
 
 const LocationPicker = (props) => {
   const [pickedLocation, setPickedLocation] = useState();
+  const [initialLocation, setInitialLocation] = useState();
   const [isFetching, setisFetching] = useState(false);
 
   const mapPickedLocation = props.navigation.getParam('pickedLocation');
 
   const { onLocationPicked } = props;
+
+  useEffect(() => {
+    setInitialCoordsHandler();
+  }, []);
 
   useEffect(() => {
     if (mapPickedLocation) {
@@ -38,6 +43,39 @@ const LocationPicker = (props) => {
       return false;
     }
     return true;
+  };
+
+  const setInitialCoordsHandler = async () => {
+    const hasPermission = await verifyPermissions();
+
+    if (!hasPermission) {
+      return;
+    }
+
+    try {
+      setisFetching(true);
+      const location = await Location.getCurrentPositionAsync({
+        timeout: 5000,
+      });
+      setInitialLocation({
+        lat: location.coords.latitude,
+        lng: location.coords.longitude,
+      });
+    } catch (error) {
+      Alert.alert(
+        'Could not fetch location!',
+        'Please try again later or pick a location on the map',
+        [{ text: 'OK' }]
+      );
+      setInitialLocation({ lat: 37.78825, lng: -122.4324 });
+      //
+    }
+
+    // if (!initialLocation) {
+    //
+    // }
+
+    setisFetching(false);
   };
 
   const getLocationHandler = async () => {
@@ -72,7 +110,7 @@ const LocationPicker = (props) => {
   };
 
   const pickOnMapHandler = () => {
-    props.navigation.navigate('Map');
+    props.navigation.navigate('Map', { gpsLocation: initialLocation });
   };
 
   return (

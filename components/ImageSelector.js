@@ -1,5 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { View, Button, Text, StyleSheet, Image, Alert } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  Button,
+  Text,
+  StyleSheet,
+  Image,
+  Alert,
+  TouchableOpacity,
+} from 'react-native';
 import Colors from '../constants/Colors';
 
 import * as ImagePicker from 'expo-image-picker';
@@ -44,13 +52,13 @@ const ImageSelector = (props) => {
 
   return (
     <View style={styles.imagePicker}>
-      <View style={styles.imagePreview}>
+      <TouchableOpacity style={styles.imagePreview} onPress={takeImageHandler}>
         {!pickedImage ? (
           <Text>No image picked yet.</Text>
         ) : (
           <Image style={styles.image} source={{ uri: pickedImage }} />
         )}
-      </View>
+      </TouchableOpacity>
       <Button
         title="Take Image"
         color={Colors.primary}

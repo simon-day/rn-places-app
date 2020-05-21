@@ -7,6 +7,7 @@ import {
   TextInput,
   Platform,
   Button,
+  Alert,
 } from 'react-native';
 import { useDispatch } from 'react-redux';
 import Colors from '../constants/Colors';
@@ -19,13 +20,21 @@ const NewPlaceScreen = (props) => {
   const [titleValue, setTitleValue] = useState('');
   const [selectedImage, setSelectedImage] = useState();
   const [selectedLocation, setSelectedLocation] = useState();
-  // const [title, setTitle] = useState('')
 
   const titleChangeHandler = (text) => {
     setTitleValue(text);
   };
 
   const savePlaceHandler = () => {
+    if (!titleValue || !selectedImage || !selectedLocation) {
+      Alert.alert(
+        'You forgot something!',
+        'Add a title, image and location before saving',
+        [{ text: 'OK' }]
+      );
+      return;
+    }
+
     dispatch(
       placesActions.addPlace(titleValue, selectedImage, selectedLocation)
     );

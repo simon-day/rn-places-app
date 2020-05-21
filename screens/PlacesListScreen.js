@@ -14,6 +14,14 @@ const PlacesListScreen = (props) => {
     dispatch(placesActions.loadPlaces());
   }, [dispatch]);
 
+  if (places.length === 0) {
+    return (
+      <View style={styles.noPlaces}>
+        <Text>You have no places saved. Begin adding some!</Text>
+      </View>
+    );
+  }
+
   return (
     <FlatList
       data={places}
@@ -54,6 +62,12 @@ PlacesListScreen.navigationOptions = (navData) => {
   };
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  noPlaces: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 export default PlacesListScreen;

@@ -22,6 +22,15 @@ const PlaceDetailScreen = (props) => {
     )
   );
 
+  const selectedLocation = place ? { lat: place.lat, lng: place.lng } : null;
+
+  const showMapHandler = () => {
+    props.navigation.navigate('Map', {
+      readonly: true,
+      initialLocation: selectedLocation,
+    });
+  };
+
   if (!place) {
     return <ActivityIndicator size="large" color={Colors.primary} />;
   }
@@ -35,7 +44,8 @@ const PlaceDetailScreen = (props) => {
         </View>
         <MapPreview
           style={styles.mapPreview}
-          location={{ lat: place.lat, lng: place.lng }}
+          location={selectedLocation}
+          onPress={showMapHandler}
         />
       </View>
     </ScrollView>
@@ -66,10 +76,13 @@ PlaceDetailScreen.navigationOptions = (navData) => {
                   dispatch(placesActions.removePlace(id, imageUri));
                   navData.navigation.goBack();
                 },
+                style: 'default',
               },
               {
                 text: 'Cancel',
-                onPress: () => console.log('Cancel Pressed'),
+                onPress: () => {
+                  return;
+                },
                 style: 'cancel',
               },
             ]);
