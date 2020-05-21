@@ -54,6 +54,7 @@ const NewPlaceScreen = (props) => {
       <View style={styles.form}>
         <Text style={styles.label}>Title</Text>
         <TextInput
+          autoFocus
           onChangeText={titleChangeHandler}
           value={titleValue}
           style={styles.textInput}

@@ -34,6 +34,29 @@ const ImageSelector = (props) => {
 
   // useEffect(() => {}, []);
 
+  const selectFromCameraRollHandler = async () => {
+    const hasPermission = await verifyPermissions();
+
+    if (!hasPermission) {
+      return;
+    }
+
+    try {
+      let image = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.5,
+      });
+
+      if (!image.cancelled) {
+        setPickedImage(image.uri);
+        props.onImageTaken(image.uri);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const takeImageHandler = async () => {
     const hasPermission = await verifyPermissions();
 
@@ -50,9 +73,34 @@ const ImageSelector = (props) => {
     props.onImageTaken(image.uri);
   };
 
+  const imagePromptHandler = () => {
+    Alert.alert(
+      'Choose an option',
+      'Upload an existing photo or take one now',
+      [
+        {
+          text: 'Library',
+          onPress: selectFromCameraRollHandler,
+        },
+        {
+          text: 'Use Camera',
+          onPress: takeImageHandler,
+        },
+        {
+          text: 'Cancel',
+          onPress: () => {},
+          style: 'cancel',
+        },
+      ]
+    );
+  };
+
   return (
     <View style={styles.imagePicker}>
-      <TouchableOpacity style={styles.imagePreview} onPress={takeImageHandler}>
+      <TouchableOpacity
+        style={styles.imagePreview}
+        onPress={imagePromptHandler}
+      >
         {!pickedImage ? (
           <Text>No image picked yet.</Text>
         ) : (
@@ -62,7 +110,7 @@ const ImageSelector = (props) => {
       <Button
         title="Take Image"
         color={Colors.primary}
-        onPress={takeImageHandler}
+        onPress={imagePromptHandler}
       />
     </View>
   );
