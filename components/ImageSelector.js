@@ -7,6 +7,7 @@ import {
   Image,
   Alert,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import Colors from '../constants/Colors';
 
@@ -86,12 +87,13 @@ const ImageSelector = (props) => {
           text: 'Use Camera',
           onPress: takeImageHandler,
         },
-        {
+        Platform.OS === 'ios' && {
           text: 'Cancel',
           onPress: () => {},
           style: 'cancel',
         },
-      ]
+      ],
+      { cancelable: true }
     );
   };
 
