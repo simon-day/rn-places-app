@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   StyleSheet,
@@ -8,14 +8,18 @@ import {
   Image,
   ActivityIndicator,
   Alert,
+  TouchableOpacity,
 } from 'react-native';
 import MapPreview from '../components/MapPreview';
 import Colors from '../constants/Colors';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import * as placesActions from '../store/places-actions';
+import ImageView from 'react-native-image-viewing';
 
 const PlaceDetailScreen = (props) => {
+  const [visibleImage, setIsVisibleImage] = useState(false);
+
   const place = useSelector((state) =>
     state.places.find(
       (place) => place.id === props.navigation.getParam('placeId')
@@ -35,9 +39,28 @@ const PlaceDetailScreen = (props) => {
     return <ActivityIndicator size="large" color={Colors.primary} />;
   }
 
+  const { imageUri } = place;
+
+  let images = [
+    {
+      uri: imageUri,
+    },
+  ];
+
   return (
     <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
-      <Image source={{ uri: place.imageUri }} style={styles.image} />
+      <ImageView
+        images={images}
+        imageIndex={0}
+        visible={visibleImage}
+        onRequestClose={() => setIsVisibleImage(false)}
+      />
+      <TouchableOpacity
+        style={styles.image}
+        onPress={() => setIsVisibleImage(true)}
+      >
+        <Image source={{ uri: place.imageUri }} style={styles.image} />
+      </TouchableOpacity>
       <View style={styles.locationContainer}>
         <View style={styles.addressContainer}>
           <Text style={styles.address}>{place.address}</Text>

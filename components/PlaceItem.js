@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Colors from '../constants/Colors';
+import { SwipeRow } from 'react-native-swipe-list-view';
 
 const PlaceItem = (props) => {
   return (

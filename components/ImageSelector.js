@@ -44,7 +44,7 @@ const ImageSelector = (props) => {
 
     try {
       let image = await ImagePicker.launchImageLibraryAsync({
-        allowsEditing: true,
+        allowsEditing: false,
         aspect: [4, 3],
         quality: 0.5,
       });
@@ -65,7 +65,7 @@ const ImageSelector = (props) => {
       return;
     }
     const image = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
+      allowsEditing: false,
       aspect: [16, 9],
       quality: 0.5,
     });
