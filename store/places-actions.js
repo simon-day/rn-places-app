@@ -19,7 +19,7 @@ export const removePlace = (placeId, imageUri) => {
   };
 };
 
-export const addPlace = (title, image, location) => {
+export const addPlace = (title, image, location, dateVisited) => {
   return async (dispatch) => {
     const response = await fetch(
       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.lat},${location.lng}&key=${ENV.googleApiKey}`
@@ -48,7 +48,8 @@ export const addPlace = (title, image, location) => {
         newPath,
         address,
         location.lat,
-        location.lng
+        location.lng,
+        dateVisited
       );
       dispatch({
         type: ADD_PLACE,
@@ -58,6 +59,7 @@ export const addPlace = (title, image, location) => {
           id: dbResult.insertId,
           address: address,
           coords: { lat: location.lat, lng: location.lng },
+          dateVisited: dateVisited,
         },
       });
     } catch (error) {

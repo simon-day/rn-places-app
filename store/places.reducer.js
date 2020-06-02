@@ -17,7 +17,8 @@ export default (state = initialState, action) => {
               place.imageUri,
               place.address,
               place.lat,
-              place.lng
+              place.lng,
+              place.dateVisited
             )
         ),
       };
@@ -32,7 +33,8 @@ export default (state = initialState, action) => {
         action.placeData.image,
         action.placeData.address,
         action.placeData.coords.lat,
-        action.placeData.coords.lng
+        action.placeData.coords.lng,
+        action.placeData.dateVisited
       );
       return {
         places: [newPlace, ...state.places],

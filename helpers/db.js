@@ -6,7 +6,7 @@ export const init = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        'CREATE TABLE IF NOT EXISTS places (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, imageUri TEXT NOT NULL, address TEXT NOT NULL, lat REAL NOT NULL, lng REAL NOT NULL);',
+        'CREATE TABLE IF NOT EXISTS places (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, imageUri TEXT NOT NULL, address TEXT NOT NULL, lat REAL NOT NULL, lng REAL NOT NULL, dateVisited TEXT NOT NULL);',
         [],
         () => {
           resolve();
@@ -17,15 +17,23 @@ export const init = () => {
       );
     });
   });
+
   return promise;
 };
 
-export const insertPlace = (title, imageUri, address, lat, lng) => {
+export const insertPlace = (
+  title,
+  imageUri,
+  address,
+  lat,
+  lng,
+  dateVisited
+) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        'INSERT INTO places (title, imageUri, address, lat, lng) VALUES (?, ?, ?, ?, ?)',
-        [title, imageUri, address, lat, lng],
+        'INSERT INTO places (title, imageUri, address, lat, lng, dateVisited) VALUES (?, ?, ?, ?, ?, ?)',
+        [title, imageUri, address, lat, lng, dateVisited],
         (_, result) => {
           resolve(result);
         },
@@ -35,6 +43,7 @@ export const insertPlace = (title, imageUri, address, lat, lng) => {
       );
     });
   });
+
   return promise;
 };
 

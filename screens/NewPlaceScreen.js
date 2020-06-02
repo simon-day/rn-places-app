@@ -8,6 +8,8 @@ import {
   Platform,
   Alert,
 } from 'react-native';
+import moment from 'moment';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { Ionicons } from '@expo/vector-icons';
 import { Button, Input } from 'react-native-elements';
 import { useDispatch } from 'react-redux';
@@ -21,6 +23,33 @@ const NewPlaceScreen = (props) => {
   const [titleValue, setTitleValue] = useState('');
   const [selectedImage, setSelectedImage] = useState();
   const [selectedLocation, setSelectedLocation] = useState();
+  // const [selectedDate, setSelectedDate] = useState()
+
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+  const [datePicked, setDatePicked] = useState(false);
+
+  const onDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    console.log(date.toString());
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
+  const closeDatePicker = () => {
+    setShow(false);
+    setDatePicked(true);
+  };
 
   const titleChangeHandler = (text) => {
     if (text.trim().length === 0) {
@@ -30,7 +59,7 @@ const NewPlaceScreen = (props) => {
   };
 
   const savePlaceHandler = () => {
-    if (!titleValue || !selectedImage || !selectedLocation) {
+    if (!titleValue || !selectedImage || !selectedLocation || !date) {
       Alert.alert(
         'You forgot something!',
         'Add a title, image and location before saving',
@@ -40,7 +69,12 @@ const NewPlaceScreen = (props) => {
     }
 
     dispatch(
-      placesActions.addPlace(titleValue, selectedImage, selectedLocation)
+      placesActions.addPlace(
+        titleValue,
+        selectedImage,
+        selectedLocation,
+        date.toISOString()
+      )
     );
     props.navigation.goBack();
   };
@@ -64,6 +98,51 @@ const NewPlaceScreen = (props) => {
             value={titleValue}
             style={styles.textInput}
           />
+        </View>
+        <View style={styles.datePicker}>
+          <View>
+            <Button
+              onPress={showDatepicker}
+              title={
+                datePicked
+                  ? moment(date).format(' [Visited] Do MMM YYYY')
+                  : ' Select Date Visited'
+              }
+              buttonStyle={{
+                backgroundColor: Colors.primary,
+                marginBottom: 10,
+              }}
+              icon={
+                <Ionicons
+                  name="ios-calendar"
+                  size={25}
+                  color="white"
+                  style={styles.icon}
+                />
+              }
+            />
+          </View>
+          {show && (
+            <View>
+              <DateTimePicker
+                testID="dateTimePicker"
+                timeZoneOffsetInMinutes={0}
+                value={date}
+                mode={mode}
+                is24Hour={true}
+                display="default"
+                onChange={onDateChange}
+              />
+              <Button
+                onPress={closeDatePicker}
+                title="Done"
+                buttonStyle={{
+                  backgroundColor: Colors.primary,
+                  marginBottom: 10,
+                }}
+              />
+            </View>
+          )}
         </View>
 
         <ImageSelector onImageTaken={imageTakenHandler} />
@@ -99,19 +178,16 @@ const styles = StyleSheet.create({
     margin: 30,
   },
   titleContainer: {
-    marginVertical: 10,
-  },
-  label: {
-    paddingHorizontal: 6,
-
-    fontSize: 18,
-    marginBottom: 5,
+    marginVertical: 5,
   },
   textInput: {
     borderBottomColor: '#ccc',
     borderBottomWidth: 1,
-    margin: 10,
+    margin: 5,
     paddingHorizontal: 4,
+  },
+  icon: {
+    marginTop: 2.5,
   },
 });
 

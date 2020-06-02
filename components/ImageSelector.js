@@ -100,18 +100,20 @@ const ImageSelector = (props) => {
 
   return (
     <View style={styles.imagePicker}>
-      <TouchableOpacity
-        style={styles.imagePreview}
-        onPress={imagePromptHandler}
-      >
-        {!pickedImage ? (
-          <Text>No image picked yet.</Text>
-        ) : (
-          <Image style={styles.image} source={{ uri: pickedImage }} />
-        )}
-      </TouchableOpacity>
+      {pickedImage && (
+        <TouchableOpacity
+          style={styles.imagePreview}
+          onPress={imagePromptHandler}
+        >
+          {!pickedImage ? (
+            <Text>No image picked yet.</Text>
+          ) : (
+            <Image style={styles.image} source={{ uri: pickedImage }} />
+          )}
+        </TouchableOpacity>
+      )}
       <Button
-        title=" Take Image"
+        title=" Pick Image"
         buttonStyle={{ backgroundColor: Colors.primary }}
         icon={
           <Ionicons
@@ -121,7 +123,6 @@ const ImageSelector = (props) => {
             style={styles.icon}
           />
         }
-        color={Colors.primary}
         onPress={imagePromptHandler}
       />
     </View>
@@ -130,7 +131,7 @@ const ImageSelector = (props) => {
 
 const styles = StyleSheet.create({
   imagePicker: {
-    alignItems: 'center',
+    // alignItems: 'center',
     marginBottom: 15,
   },
   imagePreview: {

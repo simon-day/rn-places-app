@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Colors from '../constants/Colors';
 import { SwipeRow } from 'react-native-swipe-list-view';
@@ -10,6 +11,9 @@ const PlaceItem = (props) => {
       <View style={styles.infoContainer}>
         <Text style={styles.title}>{props.title}</Text>
         <Text style={styles.address}>{props.address}</Text>
+        <Text style={styles.date}>
+          You visited on: {moment(props.dateVisited).format('MMMM Do, YYYY')}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -46,6 +50,7 @@ const styles = StyleSheet.create({
   address: {
     color: '#666',
     fontSize: 16,
+    marginBottom: 5,
   },
 });
 
