@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   View,
-  Button,
   Text,
   StyleSheet,
   Image,
@@ -9,7 +8,9 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
+import { Button } from 'react-native-elements';
 import Colors from '../constants/Colors';
+import { Ionicons } from '@expo/vector-icons';
 
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
@@ -110,7 +111,16 @@ const ImageSelector = (props) => {
         )}
       </TouchableOpacity>
       <Button
-        title="Take Image"
+        title=" Take Image"
+        buttonStyle={{ backgroundColor: Colors.primary }}
+        icon={
+          <Ionicons
+            name="ios-camera"
+            size={25}
+            color="white"
+            style={styles.icon}
+          />
+        }
         color={Colors.primary}
         onPress={imagePromptHandler}
       />
@@ -135,6 +145,9 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
+  },
+  icon: {
+    marginTop: 2.5,
   },
 });
 

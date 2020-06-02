@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Button,
-  Text,
-  ActivityIndicator,
-  Alert,
-  StyleSheet,
-} from 'react-native';
+import { View, Text, ActivityIndicator, Alert, StyleSheet } from 'react-native';
+import { Button } from 'react-native-elements';
 import Colors from '../constants/Colors';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
@@ -127,16 +121,20 @@ const LocationPicker = (props) => {
         )}
       </MapPreview>
       <View style={styles.actions}>
-        <Button
-          title="Get User Location"
-          color={Colors.primary}
-          onPress={getLocationHandler}
-        />
-        <Button
-          title="Pick On Map"
-          color={Colors.primary}
-          onPress={pickOnMapHandler}
-        />
+        <View style={styles.buttonContainer}>
+          <Button
+            title="Use My Location"
+            buttonStyle={{ backgroundColor: Colors.primary, marginRight: 10 }}
+            onPress={getLocationHandler}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button
+            title="Pick On Map"
+            buttonStyle={{ backgroundColor: Colors.primary }}
+            onPress={pickOnMapHandler}
+          />
+        </View>
       </View>
     </View>
   );
@@ -156,8 +154,11 @@ const styles = StyleSheet.create({
   },
   actions: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     width: '100%',
+  },
+  buttonContainer: {
+    flex: 1,
   },
 });
 
