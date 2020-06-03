@@ -113,7 +113,7 @@ const ImageSelector = (props) => {
         </TouchableOpacity>
       )}
       <Button
-        title=" Pick Image"
+        title=" Select Image"
         buttonStyle={{ backgroundColor: Colors.primary }}
         icon={
           <Ionicons

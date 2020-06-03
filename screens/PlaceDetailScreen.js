@@ -16,6 +16,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import * as placesActions from '../store/places-actions';
 import ImageView from 'react-native-image-viewing';
+import moment from 'moment';
 
 const PlaceDetailScreen = (props) => {
   const [visibleImage, setIsVisibleImage] = useState(false);
@@ -33,6 +34,21 @@ const PlaceDetailScreen = (props) => {
       readonly: true,
       initialLocation: selectedLocation,
     });
+  };
+
+  const formatDaysSinceVisited = () => {
+    const visitedDate = moment(place.dateVisited);
+    const today = moment();
+
+    const hoursDiff = today.diff(visitedDate, 'hours');
+
+    if (hoursDiff < 24) {
+      return 'Today';
+    } else if (hoursDiff < 48) {
+      return 'Yesterday';
+    } else {
+      return `${Math.floor(hoursDiff / 24)} days ago`;
+    }
   };
 
   if (!place) {
@@ -61,6 +77,11 @@ const PlaceDetailScreen = (props) => {
       >
         <Image source={{ uri: place.imageUri }} style={styles.image} />
       </TouchableOpacity>
+      <View style={styles.visitedContainer}>
+        <Text style={styles.visitedText}>
+          Visited {formatDaysSinceVisited()}
+        </Text>
+      </View>
       <View style={styles.locationContainer}>
         <View style={styles.addressContainer}>
           <Text style={styles.address}>{place.address}</Text>
@@ -118,15 +139,38 @@ PlaceDetailScreen.navigationOptions = (navData) => {
 
 const styles = StyleSheet.create({
   image: {
-    height: '35%',
+    // height: '35%',
     minHeight: 300,
     width: '100%',
     backgroundColor: '#ccc',
+    shadowColor: 'black',
+    shadowOpacity: 0.26,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 8,
+    // elevation: 5,
+  },
+  visitedContainer: {
+    marginTop: 30,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 30,
+    borderColor: '#ccc',
+    backgroundColor: 'white',
+    shadowColor: 'black',
+    shadowOpacity: 0.26,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  visitedText: {
+    fontSize: 18,
+    fontWeight: '200',
   },
   locationContainer: {
-    marginVertical: 20,
-    width: '90%',
-    maxWidth: 350,
+    marginVertical: 30,
+    width: '100%',
+    // maxWidth: 350,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: 'black',
@@ -135,19 +179,22 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 5,
     backgroundColor: 'white',
-    borderRadius: 10,
+
+    // borderRadius: 10,
   },
   addressContainer: {
-    padding: 20,
+    padding: 10,
   },
   address: {
     color: Colors.primary,
+    paddingBottom: 5,
     textAlign: 'center',
   },
   mapPreview: {
-    width: '100%',
-    maxWidth: 350,
-    height: 300,
+    width: '90%',
+    paddingBottom: 10,
+    // maxWidth: 350,
+    height: '80%',
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
   },

@@ -24,7 +24,8 @@ const PlacesListScreen = (props) => {
 
   return (
     <FlatList
-      data={places}
+      style={styles.screen}
+      data={places.sort((a, b) => a.dateVisited < b.dateVisited)}
       keyExtractor={(item) => item.id}
       renderItem={(itemData) => (
         <PlaceItem
@@ -64,6 +65,9 @@ PlacesListScreen.navigationOptions = (navData) => {
 };
 
 const styles = StyleSheet.create({
+  screen: {
+    backgroundColor: 'white',
+  },
   noPlaces: {
     flex: 1,
     justifyContent: 'center',

@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ActivityIndicator, Alert, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  Alert,
+  StyleSheet,
+  Platform,
+} from 'react-native';
 import { Button } from 'react-native-elements';
 import Colors from '../constants/Colors';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import MapPreview from '../components/MapPreview';
+import { Ionicons } from '@expo/vector-icons';
 
 const LocationPicker = (props) => {
   const [pickedLocation, setPickedLocation] = useState();
@@ -109,28 +117,46 @@ const LocationPicker = (props) => {
 
   return (
     <View style={styles.locationPicker}>
-      <MapPreview
-        style={styles.mapPreview}
-        location={pickedLocation}
-        onPress={pickOnMapHandler}
-      >
-        {isFetching ? (
-          <ActivityIndicator size="large" color={Colors.primary} />
-        ) : (
-          <Text>No location chosen yet</Text>
-        )}
-      </MapPreview>
+      {pickedLocation && (
+        <MapPreview
+          style={styles.mapPreview}
+          location={pickedLocation}
+          onPress={pickOnMapHandler}
+        >
+          {isFetching ? (
+            <ActivityIndicator size="large" color={Colors.primary} />
+          ) : (
+            <Text>No location chosen yet</Text>
+          )}
+        </MapPreview>
+      )}
       <View style={styles.actions}>
         <View style={styles.buttonContainer}>
           <Button
             title="Use My Location"
             buttonStyle={{ backgroundColor: Colors.primary, marginRight: 10 }}
             onPress={getLocationHandler}
+            icon={
+              <Ionicons
+                name="ios-compass"
+                style={styles.icon}
+                size={16}
+                color="white"
+              />
+            }
           />
         </View>
         <View style={styles.buttonContainer}>
           <Button
-            title="Pick On Map"
+            icon={
+              <Ionicons
+                name="ios-map"
+                style={styles.icon}
+                size={16}
+                color="white"
+              />
+            }
+            title="Select On Map"
             buttonStyle={{ backgroundColor: Colors.primary }}
             onPress={pickOnMapHandler}
           />
@@ -159,6 +185,10 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flex: 1,
+  },
+  icon: {
+    paddingTop: 2,
+    paddingRight: 4,
   },
 });
 

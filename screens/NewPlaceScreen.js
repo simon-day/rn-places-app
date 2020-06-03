@@ -32,7 +32,6 @@ const NewPlaceScreen = (props) => {
 
   const onDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
-    console.log(date.toString());
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
   };
@@ -152,13 +151,12 @@ const NewPlaceScreen = (props) => {
         />
         <Button
           title="Save Place"
-          type="outline"
           buttonStyle={{
-            borderColor: 'tomato',
+            backgroundColor: 'tomato',
             marginTop: 20,
-            color: 'tomato',
+            color: 'white',
           }}
-          titleStyle={{ color: 'tomato' }}
+          titleStyle={{ color: 'white' }}
           color={Colors.primary}
           onPress={savePlaceHandler}
         />
